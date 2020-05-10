@@ -2,7 +2,7 @@
  * @Date: 2020-04-13 19:06:27
  * @Author: goEval
  * @LastEditors: goEval
- * @LastEditTime: 2020-05-10 19:31:32
+ * @LastEditTime: 2020-05-10 19:35:59
  * @FilePath: \NovelsDown\index.js
  * @Github: https://github.com/heqyou_free
  */
@@ -20,14 +20,14 @@ program.version('1.0.0')
     .option('-p, --port [port]', 'port')
     .parse(process.argv);
 
-let resp = fs.readFileSync('./downserver.html')+'<br>init';
+let resp = '<html><head><meta charset="utf-8"><title>NovelsDown</title></head><body><script  type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script><input type="text" id="bookid"><button type="button" id="sub">Submit</button><script>if (/http:\/\/\d+\.\d+\.\d+\.\d+:\d+\/down\/\d+/.test(location.href)) {location.href = "http://"+location.host+"/stats";}$("button").click(function(){location.href = "http://"+location.host+"/down/"+$("#bookid")[0].value;});</script></body></html>'+'<br>init';
 
 const port = program.port || 8887;
 
 const cachedFiles = ['layui.js', 'layui.css', 'layer.js', 'layer.css',
   'common.js', 'common.css', 'jquery.js', 'util.js'];
 
-const history = JSON.parse(fs.readFileSync('./history.json'));
+const history = JSON.parse('{"3798":{"name":"妖孽仙皇在都市","author":"傲才","dataid":"211059","readid":"616714","readname":"第8章 治不好，他就真的会死！","readtime":"1589024324442"},"7380":{"name":"名门天后：重生国民千金","author":"一路烦花","dataid":"187491","readid":"3346176","readname":"第497章 497他要来（一更）","readtime":"1589019498290"},"11727":{"name":"嚣张特工：超级校园女神！","author":"靖州","dataid":"201741","readid":"824800","readname":"第3章 丑得辣眼睛","readtime":"1589015039617"},"17712":{"name":"最强女王：早安，修罗殿下","author":"墨落枫","dataid":"210507","readid":"440008","readname":"第183章 限制级影片（三更）","readtime":"1589081669486"},"48291":{"name":"墨少心尖宠：国民校草是女生","author":"舞韵乘风","dataid":"221982","readid":"663726","readname":"第2章 玩出一个花样来！","readtime":"1589015031388"},"75107":{"name":"重生校园：军少的异能甜妻","author":"萧小月","dataid":"238911","readid":"1324462","readname":"第13章 滚出校门","readtime":"1589042711302"},"104838":{"name":"重生天才王牌少女","author":"千夕酒","dataid":"950943","readid":"99606","readname":"第57章 幽闭恐惧","readtime":"1589036279407"}}');
 
 http.createServer((request, response) => {
   response.writeHead(200, {'Content-Type': 'charset=utf-8', 'Access-Control-Allow-Origin': '*'});
