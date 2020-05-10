@@ -2,7 +2,7 @@
  * @Date: 2020-04-13 19:06:27
  * @Author: goEval
  * @LastEditors: goEval
- * @LastEditTime: 2020-05-10 19:38:25
+ * @LastEditTime: 2020-05-10 19:45:01
  * @FilePath: \NovelsDown\index.js
  * @Github: https://github.com/heqyou_free
  */
@@ -22,7 +22,7 @@ program.version('1.0.0')
 
 let resp = '<html><head><meta charset="utf-8"><title>NovelsDown</title></head><body><script  type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script><input type="text" id="bookid"><button type="button" id="sub">Submit</button><script>if (/http:\/\/\d+\.\d+\.\d+\.\d+:\d+\/down\/\d+/.test(location.href)) {location.href = "http://"+location.host+"/stats";}$("button").click(function(){location.href = "http://"+location.host+"/down/"+$("#bookid")[0].value;});</script></body></html>'+'<br>init';
 
-const port = program.port || 80;
+const port = parseInt(process.env.PORT, 10) || (program.port || 8887);
 
 const cachedFiles = ['layui.js', 'layui.css', 'layer.js', 'layer.css',
   'common.js', 'common.css', 'jquery.js', 'util.js'];
