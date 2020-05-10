@@ -2,7 +2,7 @@
  * @Date: 2020-04-13 19:06:27
  * @Author: goEval
  * @LastEditors: goEval
- * @LastEditTime: 2020-05-09 17:02:57
+ * @LastEditTime: 2020-05-10 19:31:32
  * @FilePath: \NovelsDown\index.js
  * @Github: https://github.com/heqyou_free
  */
@@ -151,7 +151,7 @@ function parseHtml(url) {
     '<p>a</p><p>a</p><p>a</p><p>a</p><p>a</p></div>');
   $('a').eq(3).text('下载本书');
   // eslint-disable-next-line max-len
-  $('a').eq(3).attr('href', 'javascript:layui.jquery(window).attr("location", window.location.protocol+"//"+window.location.hostname+":8888/"+layui.jquery("body").attr("article-id"));');
+  $('a').eq(3).attr('href', 'javascript:layui.jquery(window).attr("location", window.location.protocol+"//"+window.location.hostname+":8887/down/"+layui.jquery("body").attr("article-id"));');
   $('#mark').text('换源');
   // eslint-disable-next-line max-len
   $('#mark').attr('href', 'javascript:layui.jquery(window).attr("location", window.location.protocol+"//"+window.location.hostname+":5555/"+layui.jquery("body").attr("article-id")+"/"+layui.jquery("body").attr("chapter-id")+".html");');

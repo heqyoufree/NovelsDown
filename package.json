@@ -4,7 +4,8 @@
   "description": "http server代理 提供阅读净化，阅读记录跨设备，更好的黑暗模式  \r 书源 [书海阁移动版](https://m.shuhaige.com)",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
   },
   "repository": {
     "type": "git",
