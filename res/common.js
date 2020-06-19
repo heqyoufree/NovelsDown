@@ -6,30 +6,16 @@
 
 var script = document.createElement('script');
 script.type = 'text/javascript';
-script.src = '../res//layui.js';
+script.src = '../res/layui.js';
 script.addEventListener('load', function() {
-  layui.use(['layer', 'util'], function() {
+  layui.use(['util'], function() {
     var $ = layui.jquery;
-    var layer = layui.layer;
     var util = layui.util;
     $('.header .i_back').click(function() {
       history.back();
     });
     $('.header .i_history').click(function() {
       $(window).attr('location', '/history.html');
-    });
-    $('.header .i_menu').click(function(e) {
-      layer.tips('<a href="/">首 页</a><a href="/shuku/">书 库</a><a href="/history.html">历 史</a><a href="/mark.html">书 架</a><a href="/search.html">搜 索</a>', this, {
-        tips: [3, '#f2f2f2'],
-        time: 0,
-        skin: 'menu',
-        fixed: true,
-        shade: 0.01,
-        shadeClose: true
-      });
-      $('.menu').click(function(e) {
-        e.stopPropagation();
-      });
     });
     $('.search .i_search').click(function() {
       $(window).attr('location', $('.search').attr('action'));
@@ -39,7 +25,6 @@ script.addEventListener('load', function() {
     });
     $('.search').submit(function() {
       if (!$(this).find('input').val().match(/^.+$/)) {
-        layer.msg('请输入搜索内容！');
         return false;
       }
     });
@@ -57,7 +42,7 @@ script.addEventListener('load', function() {
     } else if (page_id == 'history') {
       var list = [];
       console.log('test');
-      $.get("http://192.168.1.3:8887/visit", function(data) {
+      $.get("http://" + location.host + "/visit", function(data) {
         var storage = JSON.parse(data);
         for (const i in storage) {
           if ({}.hasOwnProperty.call(storage, i)) {
@@ -96,16 +81,6 @@ script.addEventListener('load', function() {
             $('div.clear').show();
           }
         });
-        $('div.clear').click(function() {
-          layer.confirm('确定清空吗？ ', {icon: 3, title: '提示'}, function(index) {
-            $('ul.list li').each(function() {
-              window.localStorage.removeItem('book_'+$(this).attr('article-id'));
-            });
-            $('ul.list').html('');
-            $('.caption b').text('0');
-            layer.close(index);
-          });
-        });
         $('ul.list').on('click', 'a.mark_del', function() {
           var li = $(this).parents('li');
           window.localStorage.removeItem('book_'+li.attr('article-id'));
@@ -132,16 +107,6 @@ script.addEventListener('load', function() {
           $(this).text('完成');
         }
       });
-      $('ul.list').on('click', 'a.mark_del', function() {
-        var li = $(this).parents('li');
-        $.getJSON('/mark/del/'+li.attr('article-id')+'/?d=json', function(res) {
-          if (res._status >= 0) {
-            li.remove();
-            $('.caption b').text($('ul.list li').length);
-          }
-          layer.msg(res._info);
-        });
-      });
     }
     var articleid = $('body').attr('article-id') || 0;
     if (articleid > 0) {
@@ -164,7 +129,7 @@ script.addEventListener('load', function() {
         var chapterid = $('body').attr('chapter-id');
         var book = {name: $('#bookname').text(), author: $('#author').text(), dataid: $('body').attr('data-id')||0, readid: chapterid, readname: $('#chapter h1').text(), readtime: $.now()};
         window.localStorage.setItem('book_'+articleid, JSON.stringify(book));
-        $.get('http://192.168.1.3:8887/book_'+articleid, book);
+        $.get('http://' + location.host + '/book_'+articleid, book);
         var size = parseInt(window.localStorage.getItem('size')) || 18;
         var theme = window.localStorage.getItem('theme') || '0';
         $('#chapter').append('<ul class="tabbar"><li>上一章</li><li>目录</li><li>设置</li><li>书页</li><li>下一章</li><li>加入书签</li><li>推荐</li><li>书库</li><li>排行</li><li>阅读记录</li></ul><div class="setting"><ul class="size"><li></li><li></li></ul><ul class="theme"><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li></ul></div>');

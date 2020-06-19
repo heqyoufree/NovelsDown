@@ -1,16 +1,15 @@
 /*
- * @Date: 2020-04-14 12:47:01
+ * @Date: 2020-05-16 21:03:55
  * @Author: goEval
  * @LastEditors: goEval
- * @LastEditTime: 2020-06-19 22:58:14
- * @FilePath: \NovelsDown\downtxthtml.js
+ * @LastEditTime: 2020-05-16 21:03:56
+ * @FilePath: \NovelsDown\downtxthtml_async.js
  * @Github: https://github.com/heqyou_free
  */
+const syncrequest = require('sync-request');
 const cheerio = require('cheerio');
 const program = require('commander');
-const querystring = require('querystring');
 const fs = require('fs');
-const requ = require('request');
 const childprocess = require('child_process');
 
 program.version('1.0.0')
@@ -33,69 +32,25 @@ if (fs.existsSync(`./down/${program.book}.txt`)) {
 }
 
 let count = 1;
+let i = 1;
 const bookurl = `https://m.shuhaige.com/${program.book}`;
-const txtbuffer = {};
-let articles = -1;
-requ({url: bookurl, timeout: 30000}, (error, resp, body) => {
-  if (error) {
-    console.error('1', e);
-  } else {
-    const _ = cheerio.load(body);
-    log('started ' + (_('select').find('option').length - 1)*100 + '章+');
-    parsepage(_);
-    console.log(_('select').find('option').length);
-    for (let i = 2; i < (_('select').find('option').length + 1); i++) {
-      requ({url: `${bookurl}_${i}`, timeout: 30000}, (e, r, b) => {
-        if (error) {
-          console.error('2', e);
-        } else {
-          parsepage(cheerio.load(b), i === _('select').find('option').length);
-        }
-      });
-    }
-  }
-});
-
-/**
- * parse
- * @param {CheerioStatic} _
- * @param {any} islast
- */
-function parsepage(_, islast) {
-  if (islast) {
-    articles = (_('select').find('option').length - 1)*100 + _('ul.read').find('li').length + 1;
-    console.log('articles', articles);
-  }
+let _ = cheerio.load(srequest(bookurl).body.toString());
+log('started ' + (_('select').find('option').length - 1)*100 + '章+');
+for (i = 1; i < (_('select').find('option').length + 1); i++) {
+  _ = i === 1 ? _ : cheerio.load(srequest(`${bookurl}_${i}`).body.toString());
   _('ul.read').find('li').each((i, e) => {
+    log(program.book + '/' + count + '/' + _(e).find('a').text());
     const id = _(e).attr('chapter-id');
-    requ({url: `${bookurl}/${id}.html`, timeout: 30000}, (error, resp, body) => {
-      console.log(resp);
-      console.log(body);
-      if (error) {
-        console.error('3', error);
-        count++;
-      } else {
-        txtbuffer[id] = `--------------------\n${_(e).find('a').text()}\n--------------------\n`;
-        txtbuffer[id] += getText(body);
-        fs.writeFileSync(`./down/${program.book}/${id}.html`, parseHtml(body));
-        count++;
-        log(program.book + '/' + count + '/' + articles + '/' + _(e).find('a').text());
-      }
-      if (count % 10 === 0) {
-        const sdic = Object.keys(txtbuffer).map(Number).sort((a, b) => {
-          return a - b;
-        });
-        let txt = '';
-        for (ki in sdic) {
-          if ({}.hasOwnProperty.call(sdic, ki)) {
-            txt += txtbuffer[sdic[ki]];
-          }
-        }
-        fs.writeFileSync(`./down/${program.book}.txt`, txt);
-      }
-    });
+    const html = srequest(`${bookurl}/${id}.html`).body.toString();
+    fs.appendFileSync(`./down/${program.book}.txt`, '--------------------\n' +
+    `${_(e).find('a').text()}\n--------------------\n`);
+    fs.appendFileSync(`./down/${program.book}.txt`, getText(html));
+    fs.writeFileSync(`./down/${program.book}/${id}.html`, parseHtml(html));
+    i++;
+    count++;
   });
 }
+log('finished');
 
 /**
  * log
@@ -103,10 +58,26 @@ function parsepage(_, islast) {
  */
 function log(data) {
   if (program.child) {
-    querystring.stringify({d: data});
-    requ(`http://127.0.0.1:7777?${querystring.stringify({d: data})}`);
+    try {
+      syncrequest.default('POST', 'http://127.0.0.1:7777', {headers: {'Content-Type': 'charset=utf-8'}, body: data});
+    } catch (e) {}
   }
   console.log(data);
+}
+
+/**
+ * sync request
+ * @param {string} url url
+ * @return {Response}
+ */
+function srequest(url) {
+  let data;
+  try {
+    data = syncrequest.default('GET', url, {timeout: 10000, retry: true});
+  } catch (e) {
+    data = srequest(url);
+  }
+  return data;
 }
 
 /**

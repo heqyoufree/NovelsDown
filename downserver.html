@@ -2,7 +2,7 @@
  * @Date: 2020-04-27 19:09:48
  * @Author: goEval
  * @LastEditors: goEval
- * @LastEditTime: 2020-05-09 17:20:00
+ * @LastEditTime: 2020-05-16 19:43:08
  * @FilePath: \NovelsDown\downserver.html
  * @Github: https://github.com/heqyou_free
  -->
@@ -16,9 +16,9 @@
   <input type="text" id="bookid">
   <button type="button" id="sub">Submit</button>
   <script>
-  if (/http:\/\/\d+\.\d+\.\d+\.\d+:\d+\/down\/\d+/.test(location.href)) {
+  if (new RegExp(location.origin + '/down/\\d').test(location.href)) {
     location.href = "http://"+location.host+"/stats";
-  }
+  };
   $("button").click(function(){
     location.href = "http://"+location.host+"/down/"+$("#bookid")[0].value;
   });
