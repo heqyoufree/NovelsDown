@@ -2,7 +2,7 @@
  * @Date: 2020-04-14 12:47:01
  * @Author: goEval
  * @LastEditors: goEval
- * @LastEditTime: 2020-06-19 22:58:14
+ * @LastEditTime: 2020-06-20 08:33:12
  * @FilePath: \NovelsDown\downtxthtml.js
  * @Github: https://github.com/heqyou_free
  */
@@ -33,7 +33,7 @@ if (fs.existsSync(`./down/${program.book}.txt`)) {
 }
 
 let count = 1;
-const bookurl = `https://m.shuhaige.com/${program.book}`;
+const bookurl = `https://m.shuhaige.net/${program.book}`;
 const txtbuffer = {};
 let articles = -1;
 requ({url: bookurl, timeout: 30000}, (error, resp, body) => {
@@ -68,21 +68,14 @@ function parsepage(_, islast) {
   }
   _('ul.read').find('li').each((i, e) => {
     const id = _(e).attr('chapter-id');
-    requ({url: `${bookurl}/${id}.html`, timeout: 30000}, (error, resp, body) => {
-      console.log(resp);
-      console.log(body);
-      if (error) {
-        console.error('3', error);
-        count++;
-      } else {
-        txtbuffer[id] = `--------------------\n${_(e).find('a').text()}\n--------------------\n`;
-        txtbuffer[id] += getText(body);
-        fs.writeFileSync(`./down/${program.book}/${id}.html`, parseHtml(body));
-        count++;
-        log(program.book + '/' + count + '/' + articles + '/' + _(e).find('a').text());
-      }
-      if (count % 10 === 0) {
-        const sdic = Object.keys(txtbuffer).map(Number).sort((a, b) => {
+    requestChapter(`${bookurl}/${id}.html`, (body) => {
+      txtbuffer[id] = `--------------------\n${_(e).find('a').text()}\n--------------------\n`;
+      txtbuffer[id] += getText(body);
+      fs.writeFileSync(`./down/${program.book}/${id}.html`, parseHtml(body));
+      count++;
+      log(program.book + '/' + count + '/' + articles + '/' + _(e).find('a').text());
+      if (count % 10 === 0 || count === articles) {
+        const sdic = Object.keys(txtbuffer). map(Number).sort((a, b) => {
           return a - b;
         });
         let txt = '';
@@ -94,6 +87,18 @@ function parsepage(_, islast) {
         fs.writeFileSync(`./down/${program.book}.txt`, txt);
       }
     });
+  });
+}
+
+// eslint-disable-next-line require-jsdoc
+async function requestChapter(url, callback) {
+  requ({url: url, timeout: 10000}, (error, resp, body) => {
+    if (error) {
+      console.error('3', error);
+      requestChapter(url, callback);
+    } else {
+      callback(body);
+    }
   });
 }
 

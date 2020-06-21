@@ -45,7 +45,7 @@ http.createServer((request, response) => {
      */
     if (/\d+\/\d+\.html/.test(request.url)) {
       // use internet
-      response.end(parseHtml(`https://m.shuhaige.com${request.url}`), () => {
+      response.end(parseHtml(`https://m.shuhaige.net${request.url}`), () => {
         console.log(`finish ${request.url}`);
       });
       return;
@@ -108,7 +108,7 @@ http.createServer((request, response) => {
     if (cached) return;
     console.log(`request ${request.url}`);
     // pass proxy
-    const resq = syncrequest.default(request.method, `https://m.shuhaige.com${request.url}`);
+    const resq = syncrequest.default(request.method, `https://m.shuhaige.net${request.url}`);
     response.end(resq.body.toString());
     return;
   } catch (e) {

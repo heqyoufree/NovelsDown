@@ -55,7 +55,7 @@ class shuhaige {
    * @return {string}
    */
   static get domain() {
-    return 'm.shuhaige.com';
+    return 'm.shuhaige.net';
   }
 }
 module.exports = shuhaige;

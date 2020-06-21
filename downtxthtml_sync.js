@@ -33,7 +33,7 @@ if (fs.existsSync(`./down/${program.book}.txt`)) {
 
 let count = 1;
 let i = 1;
-const bookurl = `https://m.shuhaige.com/${program.book}`;
+const bookurl = `https://m.shuhaige.net/${program.book}`;
 let _ = cheerio.load(srequest(bookurl).body.toString());
 log('started ' + (_('select').find('option').length - 1)*100 + '章+');
 for (i = 1; i < (_('select').find('option').length + 1); i++) {

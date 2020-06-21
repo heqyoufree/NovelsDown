@@ -2,7 +2,7 @@
  * @Date: 2020-05-30 18:01:08
  * @Author: goEval
  * @LastEditors: goEval
- * @LastEditTime: 2020-05-31 09:11:32
+ * @LastEditTime: 2020-06-20 08:35:23
  * @FilePath: \NovelsDown\worldwideserver.js
  * @Github: https://github.com/heqyou_free
  */
@@ -69,7 +69,7 @@ http.createServer((request, response) => {
     if (cached) return;
     console.log(`request ${request.url}`);
     // pass proxy
-    const resq = syncrequest.default(request.method, `https://m.shuhaige.com${request.url}`);
+    const resq = syncrequest.default(request.method, `https://m.shuhaige.net${request.url}`);
     response.end(resq.body.toString());
     return;
   } catch (e) {
