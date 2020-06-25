@@ -2,7 +2,7 @@
  * @Date: 2020-04-13 19:06:27
  * @Author: goEval
  * @LastEditors: goEval
- * @LastEditTime: 2020-05-17 10:21:25
+ * @LastEditTime: 2020-06-25 18:57:08
  * @FilePath: \NovelsDown\index.js
  * @Github: https://github.com/heqyou_free
  */
@@ -16,7 +16,7 @@ const http = require('http');
 const mime = require('mime');
 const path = require('path');
 const url = require('url');
-const fs = require('fs');
+// const fs = require('fs');
 
 program.version('1.0.0')
     .option('-p, --port [port]', 'port')
@@ -29,7 +29,7 @@ const port = parseInt(process.env.PORT, 10) || (program.port || 8887);
 const cachedFiles = ['layui.js', 'layui.css', 'layer.js', 'layer.css',
   'common.js', 'common.css', 'jquery.js', 'util.js'];
 
-const history = JSON.parse(fs.readFileSync('./history.json'));
+// const history = JSON.parse(fs.readFileSync('./history.json'));
 
 http.createServer((request, response) => {
   response.writeHead(200, {
@@ -66,7 +66,7 @@ http.createServer((request, response) => {
       } else {
         history[articleid] = args;
       }
-      fs.writeFileSync('./history.json', JSON.stringify(history));
+      // fs.writeFileSync('./history.json', JSON.stringify(history));
       response.end('success');
       return;
     }
