@@ -2,7 +2,7 @@
  * @Date: 2020-04-13 19:06:27
  * @Author: goEval
  * @LastEditors: goEval
- * @LastEditTime: 2020-06-25 18:57:08
+ * @LastEditTime: 2020-06-25 18:58:45
  * @FilePath: \NovelsDown\index.js
  * @Github: https://github.com/heqyou_free
  */
@@ -16,7 +16,7 @@ const http = require('http');
 const mime = require('mime');
 const path = require('path');
 const url = require('url');
-// const fs = require('fs');
+const fs = require('fs');
 
 program.version('1.0.0')
     .option('-p, --port [port]', 'port')
